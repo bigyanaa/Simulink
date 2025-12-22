@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Flask App{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fractions - Mathematics Learning Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],  
+        displayMath: [['$$', '$$'], ['\\[', '\\]']] 
+      }
+    };
+    </script>
+    
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+       body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+        .fraction-visual {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border: 2px solid #3457D5;
+            display: inline-block;
+        }
+        .filled {
+            background-color: #3457D5;
+        }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1.5rem;
+            background: #1a73e8;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            color: white;
+            font-size: 2.5em;
+        }
+        .simulation-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .controls {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+        .canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: #1a1a2e;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+        label {
+            display: block;
+            margin-bottom: 1rem;
+            color: #1a1a2e;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4a90e2;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #357abd;
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            width: 100%;
+            font-size: 1.1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            background: #357abd;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        .fraction-display {
+            text-align: center;
+            font-size: 2.5em;
+            margin: 1.5rem 0;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Understanding Fractions</h1>
+                <p class="lead tochange">Fractions represent parts of a whole, allowing us to work with quantities that aren't whole numbers.</p>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-primary">Basic Concepts</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Parts of a Fraction</h5>
+                            <p>$$ \frac{Numerator}{Denominator} $$</p>
+                            <ul>
+                                <li>Numerator: Number of parts taken</li>
+                                <li>Denominator: Total number of equal parts</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Types of Fractions</h5>
+                            <p>Proper Fraction: $$ \frac{1}{2}, \frac{3}{4} $$ (numerator < denominator)</p>
+                            <p>Improper Fraction: $$ \frac{5}{3}, \frac{7}{4} $$ (numerator > denominator)</p>
+                            <p>Mixed Number: $$ 1\frac{1}{2}, 2\frac{3}{4} $$ (whole number + proper fraction)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Operations with Fractions</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Addition and Subtraction</h5>
+                            <p>With same denominators:</p>
+                            <p>$$ \frac{a}{c} \pm \frac{b}{c} = \frac{a \pm b}{c} $$</p>
+                            <p>With different denominators:</p>
+                            <p>$$ \frac{a}{b} \pm \frac{c}{d} = \frac{ad \pm bc}{bd} $$</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Multiplication and Division</h5>
+                            <p>Multiplication:</p>
+                            <p>$$ \frac{a}{b} \times \frac{c}{d} = \frac{ac}{bd} $$</p>
+                            <p>Division:</p>
+                            <p>$$ \frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c} = \frac{ad}{bc} $$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Simplifying Fractions</h3>
+                <div class="alert alert-primary">
+                    <h5>Steps to Simplify</h5>
+                    <ol>
+                        <li>Find the GCD (Greatest Common Divisor) of numerator and denominator</li>
+                        <li>Divide both numerator and denominator by the GCD</li>
+                    </ol>
+                    <p>Example:</p>
+                    <p>$$ \frac{24}{36} = \frac{24 \div 12}{36 \div 12} = \frac{2}{3} $$</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Common Applications</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Applications</th>
+                                <th>Examples</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cooking</td>
+                                <td>Recipe measurements</td>
+                                <td>½ cup sugar, ¾ teaspoon salt</td>
+                            </tr>
+                            <tr>
+                                <td>Construction</td>
+                                <td>Measurements and scaling</td>
+                                <td>⅝ inch plywood, ¼ inch drill bit</td>
+                            </tr>
+                            <tr>
+                                <td>Finance</td>
+                                <td>Percentages and ratios</td>
+                                <td>¾ of total budget, ½ yearly interest</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Review Questions</h3>
+                <ol>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Simplify the fraction $\frac{48}{64}$</p>
+                        <p><em>Answer:</em> $\frac{48 \div 16}{64 \div 16} = \frac{3}{4}$</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Add $\frac{3}{8}$ and $\frac{5}{8}$</p>
+                        <p><em>Answer:</em> $\frac{3}{8} + \frac{5}{8} = \frac{8}{8} = 1$</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Convert $2\frac{3}{4}$ to improper fraction</p>
+                        <p><em>Answer:</em> $\frac{(2 \times 4) + 3}{4} = \frac{11}{4}$</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+ 
+        <div class="container">
+            <div class="header">
+                <h1>🎨 FractionFun! 🎨</h1>
+            </div>
+           
+            <div class="simulation-container">
+                <div class="controls">
+                    <div class="fraction-display">
+                        <span id="numerator">1</span>/<span id="denominator">2</span>
+                    </div>
+                   
+                    <div class="input-group">
+                        <label>Numerator</label>
+                        <input type="range" id="numeratorSlider" min="1" max="10" value="1">
+                    </div>
+                   
+                    <div class="input-group">
+                        <label>Denominator</label>
+                        <input type="range" id="denominatorSlider" min="1" max="10" value="2">
+                    </div>
+                   
+                    <button id="toggleShape">Switch Shape</button>
+                    <button id="toggleAnimation">Toggle Animation</button>
+                </div>
+               
+                <div class="canvas-container" id="canvas-container"></div>
+            </div>
+        </div>
+    
+        <script>
+            let currentShape = 'rectangle';
+            let animate = false;
+            let rotation = 0;
+           
+            function setup() {
+                const canvas = createCanvas(600, 400);
+                canvas.parent('canvas-container');
+            }
+           
+            function drawCircleFraction(num, denom) {
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const radius = min(width, height) * 0.35;
+               
+                push();
+                translate(centerX, centerY);
+                if (animate) rotate(rotation);
+               
+                // Draw the background circle (unfilled)
+                fill(220);
+                noStroke();
+                circle(0, 0, radius * 2);
+               
+                // Draw slices (filled parts)
+                const angleStep = TWO_PI / denom;
+                for (let i = 0; i < num; i++) {
+                    fill('#FF6B6B');
+                    arc(0, 0, radius * 2, radius * 2, i * angleStep, (i + 1) * angleStep);
+                }
+                
+                // Draw dividing lines even when shape is not filled
+                stroke(0);
+                strokeWeight(2);
+                for (let i = 0; i < denom; i++) {
+                    const angle = i * TWO_PI / denom;
+                    const x1 = cos(angle) * radius;
+                    const y1 = sin(angle) * radius;
+                    const x2 = cos(angle + TWO_PI / denom) * radius;
+                    const y2 = sin(angle + TWO_PI / denom) * radius;
+                    line(x1, y1, x2, y2);
+                }
+               
+                // Center circle for better visibility
+                fill(255);
+                noStroke();
+                circle(0, 0, 20);
+                pop();
+            }
+           
+            function drawRectangleFraction(num, denom) {
+                const margin = 50;
+                const rectWidth = width - margin * 2;
+                const rectHeight = height - margin * 2;
+                const pieceWidth = rectWidth / denom;
+               
+                push();
+                translate(margin, margin);
+                if (animate) translate(0, sin(rotation * 2) * 10);
+               
+                // Draw the background rectangle (unfilled)
+                fill(220);
+                noStroke();
+                rect(0, 0, rectWidth, rectHeight);
+               
+                // Draw pieces (filled parts)
+                for (let i = 0; i < num; i++) {
+                    fill('#FF6B6B');
+                    rect(i * pieceWidth, 0, pieceWidth, rectHeight);
+                }
+                
+                // Draw dividing lines even when shape is not filled
+                stroke(0);
+                strokeWeight(2);
+                for (let i = 1; i < denom; i++) {
+                    line(i * pieceWidth, 0, i * pieceWidth, rectHeight);
+                }
+                pop();
+            }
+           
+            function draw() {
+                background(255);
+               
+                const num = parseInt(document.getElementById('numeratorSlider').value);
+                const denom = parseInt(document.getElementById('denominatorSlider').value);
+               
+                if (currentShape === 'circle') {
+                    drawCircleFraction(num, denom);
+                } else {
+                    drawRectangleFraction(num, denom);
+                }
+               
+                if (animate) {
+                    rotation += 0.02;
+                }
+            }
+           
+            // Event Listeners
+            document.getElementById('numeratorSlider').addEventListener('input', function() {
+                document.getElementById('numerator').textContent = this.value;
+            });
+           
+            document.getElementById('denominatorSlider').addEventListener('input', function() {
+                document.getElementById('denominator').textContent = this.value;
+            });
+           
+            document.getElementById('toggleShape').addEventListener('click', function() {
+                currentShape = currentShape === 'circle' ? 'rectangle' : 'circle';
+            });
+           
+            document.getElementById('toggleAnimation').addEventListener('click', function() {
+                animate = !animate;
+                rotation = 0;
+            });
+        </script>
+
+</body>
+</html>
+{% endblock %}

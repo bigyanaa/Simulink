@@ -1,0 +1,543 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Flask App{% endblock %}
+
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Superposition - Physics Learning Hub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .controls-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        .control-panel {
+            flex: 1;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .canvas-container {
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
+        button:hover {
+            background: #357abd;
+        }
+        .value-display {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.2rem;
+        }
+        .mode-switch {
+            background: #f0f0f0;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .instructions {
+            color: white;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Wave Superposition</h1>
+                <p class="lead text-dark tochange">Wave superposition is a fundamental principle in physics where two or more waves combine to form a resultant wave. The total displacement at any point is equal to the vector sum of the individual wave displacements.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://phys.libretexts.org/@api/deki/files/6062/Figure_17_10_02a.jpg?revision=1ng" class="img-fluid rounded shadow" alt="Wave Superposition">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-primary">Key Principles</h2>
+                <p>The principle of superposition states that:</p>
+                <ul>
+                    <li>When two or more waves meet, they combine by adding their individual displacements</li>
+                    <li>Each wave continues to travel independently after the interaction</li>
+                    <li>The combined amplitude can be greater or less than individual waves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="text-primary">Constructive Interference</h3>
+                        <p>Occurs when waves combine to create a larger amplitude:</p>
+                        <ul>
+                            <li>Waves are in phase</li>
+                            <li>Crests align with crests</li>
+                            <li>Troughs align with troughs</li>
+                            <li>Results in amplification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="text-primary">Destructive Interference</h3>
+                        <p>Occurs when waves combine to create a smaller amplitude:</p>
+                        <ul>
+                            <li>Waves are out of phase</li>
+                            <li>Crests align with troughs</li>
+                            <li>Can result in complete cancellation</li>
+                            <li>Results in reduction</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Standing Waves</h3>
+                <p>Standing waves are a special case of wave superposition where:</p>
+                <ul>
+                    <li>Two waves of equal amplitude and frequency travel in opposite directions</li>
+                    <li>Creates patterns of nodes (points of no displacement) and antinodes (points of maximum displacement)</li>
+                    <li>Common in musical instruments and resonant systems</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Applications</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Wave Applications</h4>
+                        <ul>
+                            <li>Noise-canceling headphones</li>
+                            <li>Musical instruments</li>
+                            <li>Radio and television broadcasting</li>
+                            <li>Optical interferometry</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Real-World Examples</h4>
+                        <ul>
+                            <li>Sound wave interference in concert halls</li>
+                            <li>Light interference in thin films</li>
+                            <li>Electromagnetic wave interference</li>
+                            <li>Water wave patterns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <h1>Wave Maker - Manual & Automatic</h1>
+                <p class="tochange">You can Simulate wave here </p>
+            </div>
+    
+            <div class="controls-container">
+                <div class="control-panel">
+                    <h3>Manual Wave Controls</h3>
+                    <button id="addManualWave">New Manual Wave</button>
+                    <button id="undoLastPoint">Undo Last Point</button>
+                    <div class="input-group">
+                        <label>Smoothing</label>
+                        <input type="range" id="smoothing" min="0" max="100" value="20">
+                        <div class="value-display">Current: <span id="smoothingValue">20</span>%</div>
+                    </div>
+                </div>
+    
+                <div class="control-panel">
+                    <h3>Auto Wave Controls</h3>
+                    <div class="input-group">
+                        <label>Amplitude</label>
+                        <input type="range" id="amplitude" min="10" max="150" value="50">
+                        <div class="value-display">Current: <span id="amplitudeValue">50</span></div>
+                    </div>
+                    <div class="input-group">
+                        <label>Frequency (Hz)</label>
+                        <input type="range" id="frequency" min="0.5" max="5" value="1" step="0.1">
+                        <div class="value-display">Current: <span id="frequencyValue">1</span> Hz</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Phase (degrees)</label>
+                        <input type="range" id="phase" min="0" max="360" value="0">
+                        <div class="value-display">Current: <span id="phaseValue">0</span>°</div>
+                    </div>
+                    <button id="addAutoWave">Add Auto Wave</button>
+                </div>
+            </div>
+    
+            <div class="controls-container">
+                <button id="combine" style="flex: 1">Combine Waves</button>
+                <button id="clear" style="flex: 1">Clear All</button>
+                <button id="toggleAnimation" style="flex: 1">Start/Stop</button>
+            </div>
+    
+            <div class="instructions">
+     
+            </div>
+            
+            <div class="canvas-container" id="canvas-container"></div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Review Questions</h3>
+                <ol>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Two waves with amplitudes of 3 cm and 4 cm interfere constructively. What is the maximum possible amplitude of the resultant wave?</p>
+                        <p><em>Answer:</em> 7 cm (The amplitudes add directly in perfect constructive interference)</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> What conditions are necessary for complete destructive interference to occur?</p>
+                        <p><em>Answer:</em> The waves must have equal amplitudes and be 180 degrees out of phase</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> In a standing wave, what is the distance between consecutive nodes?</p>
+                        <p><em>Answer:</em> Half a wavelength (λ/2)</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Why don't we typically observe interference patterns with light from two different light bulbs?</p>
+                        <p><em>Answer:</em> Light from different sources is not coherent (not in phase and not of the same frequency)</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-primary btn-sm rounded-pill px-2 py-1" style="width: 80px;" onclick="window.location.href = 'continue/'">Next</button>
+        </div>
+        
+        
+        
+    </div>
+    
+    
+    
+    <script>
+        console.log('{{pageId}}')
+        let waves = [];
+        let currentWave = [];
+        let isDrawing = false;
+        let combinedWave = [];
+        let showCombined = false;
+        let time = 0;
+        let isAnimating = true;
+        let colors = ['#41B3FF', '#FF7E47', '#47FF83', '#FF47E3', '#FFD447', '#47FFE3'];
+        let smoothingFactor = 0.2;
+
+        function setup() {
+            const canvas = createCanvas(800, 400);
+            canvas.parent('canvas-container');
+            waves.push({
+                points: [],
+                type: 'manual'
+            });
+        }
+
+        function createSineWave() {
+            const amplitude = float(document.getElementById('amplitude').value);
+            const frequency = float(document.getElementById('frequency').value);
+            const phase = radians(float(document.getElementById('phase').value));
+            
+            let points = [];
+            for (let x = 0; x < width; x += 2) {
+                const xValue = map(x, 0, width, 0, TWO_PI * 2);
+                const y = height/2 + amplitude * sin(frequency * xValue + phase);
+                points.push({x: x, y: y});
+            }
+            
+            return {
+                points: points,
+                type: 'auto',
+                params: {amplitude, frequency, phase}
+            };
+        }
+
+        function smoothWave(points) {
+            if (points.length < 3) return points;
+            
+            const factor = float(document.getElementById('smoothing').value) / 100;
+            let smoothed = [];
+            smoothed.push({x: points[0].x, y: points[0].y});
+            
+            for (let i = 1; i < points.length - 1; i++) {
+                let prevY = points[i-1].y;
+                let currentY = points[i].y;
+                let nextY = points[i+1].y;
+                let smoothY = currentY * (1 - factor) + 
+                             (prevY + nextY) / 2 * factor;
+                smoothed.push({x: points[i].x, y: smoothY});
+            }
+            
+            smoothed.push({x: points[points.length-1].x, y: points[points.length-1].y});
+            return smoothed;
+        }
+
+        function mousePressed() {
+            if (mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
+                isDrawing = true;
+                if (waves[waves.length - 1].type === 'manual') {
+                    waves[waves.length - 1].points = [];
+                    currentWave = waves[waves.length - 1].points;
+                }
+            }
+        }
+
+        function mouseDragged() {
+            if (isDrawing && mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
+                currentWave.push({x: mouseX, y: mouseY});
+                waves[waves.length - 1].points = smoothWave(currentWave);
+            }
+        }
+
+        function mouseReleased() {
+            isDrawing = false;
+            if (currentWave.length > 0) {
+                waves[waves.length - 1].points = smoothWave(currentWave);
+            }
+        }
+
+        function interpolateWave(wave) {
+            if (wave.length < 2) return wave;
+            
+            let interpolated = [];
+            for (let i = 0; i < width; i++) {
+                let x = i;
+                let found = false;
+                
+                for (let j = 0; j < wave.length - 1; j++) {
+                    if (x >= wave[j].x && x <= wave[j+1].x) {
+                        let t = (x - wave[j].x) / (wave[j+1].x - wave[j].x);
+                        let y = lerp(wave[j].y, wave[j+1].y, t);
+                        interpolated.push({x: x, y: y});
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found) {
+                    if (x < wave[0].x) {
+                        interpolated.push({x: x, y: wave[0].y});
+                    } else if (x > wave[wave.length-1].x) {
+                        interpolated.push({x: x, y: wave[wave.length-1].y});
+                    }
+                }
+            }
+            return interpolated;
+        }
+
+        function combineWaves() {
+            if (waves.length === 0) return;
+            
+            let interpolatedWaves = waves.map(wave => interpolateWave(wave.points));
+            combinedWave = [];
+            
+            for (let x = 0; x < width; x++) {
+                let sumY = 0;
+                let count = 0;
+                
+                interpolatedWaves.forEach(wave => {
+                    if (wave[x]) {
+                        sumY += wave[x].y;
+                        count++;
+                    }
+                });
+                
+                if (count > 0) {
+                    combinedWave.push({x: x, y: sumY / count});
+                }
+            }
+            showCombined = true;
+        }
+
+        function draw() {
+            background(26, 26, 46);
+            
+          
+            stroke(50);
+            strokeWeight(1);
+            for (let x = 0; x < width; x += 50) {
+                line(x, 0, x, height);
+            }
+            for (let y = 0; y < height; y += 50) {
+                line(0, y, width, y);
+            }
+
+            if (isAnimating) {
+                time += 0.05;
+            }
+
+            if (showCombined) {
+                //  combined wave
+                stroke(255);
+                strokeWeight(3);
+                noFill();
+                beginShape();
+                for (let i = 0; i < combinedWave.length; i++) {
+                    let x = (i + time * 50) % width;
+                    let point = combinedWave[i];
+                    vertex(x, point.y);
+                }
+                endShape();
+                push()
+                strokeWeight(0.5)
+                text("The Superimposed wave is shown on the top ",width-300,height/2+150);
+                pop()
+            } else {
+                //  individual waves
+                waves.forEach((wave, index) => {
+                    if (wave.points.length > 0) {
+                        stroke(colors[index % colors.length]);
+                        strokeWeight(3);
+                        noFill();
+                        beginShape();
+                        wave.points.forEach(point => {
+                            let x = (point.x + time * 50) % width;
+                            vertex(x, point.y);
+                        });
+                        endShape();
+                    }
+                });
+            }
+        }
+
+        function updateDisplays() {
+            document.getElementById('smoothingValue').textContent = document.getElementById('smoothing').value;
+            document.getElementById('amplitudeValue').textContent = document.getElementById('amplitude').value;
+            document.getElementById('frequencyValue').textContent = document.getElementById('frequency').value;
+            document.getElementById('phaseValue').textContent = document.getElementById('phase').value;
+        }
+
+       
+        document.getElementById('addManualWave').addEventListener('click', () => {
+            if (waves[waves.length - 1].points.length > 0) {
+                waves.push({
+                    points: [],
+                    type: 'manual'
+                });
+                showCombined = false;
+            }
+        });
+
+        document.getElementById('addAutoWave').addEventListener('click', () => {
+            waves.push(createSineWave());
+            showCombined = false;
+        });
+
+        document.getElementById('undoLastPoint').addEventListener('click', () => {
+            if (currentWave.length > 0) {
+                currentWave.pop();
+                waves[waves.length - 1].points = smoothWave(currentWave);
+            }
+        });
+
+        document.getElementById('combine').addEventListener('click', combineWaves);
+
+        document.getElementById('clear').addEventListener('click', () => {
+            waves = [{
+                points: [],
+                type: 'manual'
+            }];
+            combinedWave = [];
+            showCombined = false;
+        });
+
+        document.getElementById('toggleAnimation').addEventListener('click', () => {
+            isAnimating = !isAnimating;
+        });
+
+        ['smoothing', 'amplitude', 'frequency', 'phase'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateDisplays);
+        });
+
+        updateDisplays();
+    </script>
+
+</body>
+</html>
+{% endblock %}

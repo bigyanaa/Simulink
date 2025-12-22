@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Flask App{% endblock %}
+
+
+{% block content %}
+
+    <style>
+        .body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: white;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;   
+            width: 100%;
+
+             }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+        }
+        h2 {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .column {
+            width: 48%;
+        }
+        button {
+            background: #0056b3;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #003d80;
+        }
+    </style>
+</head>
+<div class="body">
+    <div class="container">
+        <h2>Contact Form</h2>
+        <p>Fill up the form below. Our representatives will get back to you as soon as possible.</p>
+        <form>
+            <div class="row">
+                <div class="column">
+                    <label for="first-name">First Name *</label>
+                    <input type="text" id="first-name" name="first-name" required>
+                </div>
+                <div class="column">
+                    <label for="last-name">Last Name *</label>
+                    <input type="text" id="last-name" name="last-name" required>
+                </div>
+            </div>
+            <label for="contact-number">Contact Number *</label>
+            <input type="tel" id="contact-number" name="contact-number" required>
+            
+            
+            <label for="message">Description *</label>
+            <textarea id="message" name="message" placeholder="Please write your message here" required></textarea>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

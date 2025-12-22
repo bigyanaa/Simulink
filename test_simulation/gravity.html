@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravity - Physics Learning Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MathJax for equation rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .simulation-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .controls {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor:pointer;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
+        button:hover {
+            background: #357abd;
+        }
+    </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+  
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Gravity</h1>
+                <p class="lead tochange">Gravity is a fundamental force of nature that attracts all objects with mass towards each other.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://cdn.britannica.com/56/59856-050-AAA3AA05/Godfrey-Kneller-Isaaac-Newton-oil-painting-National-1702.jpg" class="img-fluid rounded shadow" alt="Gravity Concept">
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="text-primary">Newton's Law of Universal Gravitation</h3>
+                <div class="alert alert-primary">
+                    <p>$$ F = G\frac{m_1m_2}{r^2} $$</p>
+                    <ul class="mb-0">
+                        <li>F = Gravitational force</li>
+                        <li>G = Gravitational constant (6.674 × 10⁻¹¹ N⋅m²/kg²)</li>
+                        <li>m₁, m₂ = Masses of objects</li>
+                        <li>r = Distance between centers of masses</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <img src="https://www.schoolphysics.co.uk/age16-19/Mechanics/Gravitation/text/Gravitational_potential_gradient/images/1.png" class="card-img-top" alt="Gravitational Effects">
+                    <div class="card-body">
+                        <h4 class="text-primary">Gravitational Field</h4>
+                        <p>The gravitational field strength (g) at Earth's surface:</p>
+                        <div class="alert alert-primary">
+                            <p>$$ g = \frac{GM}{R^2} \approx 9.81 \text{ m/s}^2 $$</p>
+                        </div>
+                        <ul>
+                            <li>Varies with altitude: $$ g(h) = g_0\left(\frac{R}{R+h}\right)^2 $$</li>
+                            <li>Varies with latitude</li>
+                            <li>Depends on local mass distribution</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="text-primary">Gravitational Potential Energy</h4>
+                        <div class="alert alert-primary">
+                            <p>$$ PE = mgh $$</p>
+                            <p>$$ PE = -\frac{GMm}{r} \text{ (general form)} $$</p>
+                        </div>
+                        <ul>
+                            <li>m = mass of object</li>
+                            <li>g = gravitational field strength</li>
+                            <li>h = height above reference point</li>
+                        </ul>
+                        <h5 class="mt-3 text-primary">Escape Velocity</h5>
+                        <div class="alert alert-primary">
+                            <p>$$ v_e = \sqrt{\frac{2GM}{R}} $$</p>
+                            <p>Earth's escape velocity: 11.2 km/s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="text-primary">Applications of Gravity</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Astronomical</h5>
+                        <ul>
+                            <li>Planetary orbits</li>
+                            <li>Tidal forces</li>
+                            <li>Satellite motion</li>
+                            <li>Galaxy formation</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Earth-based</h5>
+                        <ul>
+                            <li>Weather patterns</li>
+                            <li>Ocean currents</li>
+                            <li>Construction</li>
+                            <li>Transportation</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Technology</h5>
+                        <ul>
+                            <li>GPS systems</li>
+                            <li>Space exploration</li>
+                            <li>Gravity surveys</li>
+                            <li>Gravitational lensing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header">
+                <h1>Gravity Visualization</h1>
+                <p class="tochange">You can visualize gravity here</p>
+            </div>
+            
+        <div class="simulation-container">
+            <div class="controls">
+                <div class="input-group">
+                    <label>Mass 1 Size</label>
+                    <input type="range" id="mass1" min="10" max="50" value="30">
+                </div>
+                
+                <div class="input-group">
+                    <label>Mass 2 Size</label>
+                    <input type="range" id="mass2" min="10" max="50" value="20">
+                </div>
+                
+                <div class="input-group">
+                    <label>Attraction Strength</label>
+                    <input type="range" id="gravity" min="1" max="10" value="5">
+                </div>
+                
+                <button id="reset">Reset Position</button>
+                <button id="toggleOrbit">Toggle Orbit</button>
+                <button id="toggleTrail">Toggle Trail</button>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let bodies = [];
+        let showOrbit = false;
+        let showTrail = true;
+        let trails = [[], []];
+        const maxTrailPoints = 50;
+
+        class Body {
+            constructor(x, y, mass, color) {
+                this.pos = createVector(x, y);
+                this.vel = createVector(0, 0);
+                this.acc = createVector(0, 0);
+                this.mass = mass;
+                this.color = color;
+                this.radius = mass;  
+            }
+
+            update() {
+                if (showOrbit) {
+                    this.vel.add(this.acc);
+                    this.pos.add(this.vel);
+                    this.acc.mult(0);
+                }
+            }
+
+            applyForce(force) {
+                let f = p5.Vector.div(force, this.mass);
+                this.acc.add(f);
+            }
+
+            draw() {
+                push();
+                // addition of glowing effect (cicle with other color lever)
+                for(let i = 4; i > 0; i--) {
+                    fill(this.color.levels[0], this.color.levels[1], this.color.levels[2], 50/i);
+                    noStroke();
+                    circle(this.pos.x, this.pos.y, this.radius * 2 + i * 10);
+                }
+         
+                fill(this.color);
+                noStroke();
+                circle(this.pos.x, this.pos.y, this.radius * 2);
+                pop();
+            }
+        }
+
+        function setup() {
+            const canvas = createCanvas(600, 400);
+            canvas.parent('canvas-container');
+            resetSimulation();
+        }
+
+        function resetSimulation() {
+            const mass1 = float(document.getElementById('mass1').value);
+            const mass2 = float(document.getElementById('mass2').value);
+            const centerX = width/2;
+            const centerY = height/2;
+
+            bodies = [
+                new Body(centerX - 100, centerY, mass1, color(65, 184, 255)), // Bright blue
+                new Body(centerX + 100, centerY, mass2, color(255, 89, 94))  // Bright red
+            ];
+
+            trails = [[], []];
+
+            if (showOrbit) {
+                const dist = 200;
+                const speed = float(document.getElementById('gravity').value) / 10;
+                bodies[1].vel = createVector(0, -speed);
+                bodies[0].vel = createVector(0, speed * (bodies[1].mass/bodies[0].mass));
+            }
+        }
+
+        function calculateAttraction(body1, body2) {
+            let force = p5.Vector.sub(body2.pos, body1.pos);
+            let distance = constrain(force.mag(), 100, 1000);
+            let strength = (float(document.getElementById('gravity').value) * body1.mass * body2.mass) / (distance * distance);
+            force.normalize();
+            force.mult(strength);
+            return force;
+        }
+
+        function draw() {
+            background(26, 26, 46);
+            
+            // force ko lineharu
+            push();
+            stroke(255, 100);
+            strokeWeight(1);
+            let forceLine = p5.Vector.sub(bodies[1].pos, bodies[0].pos);
+            forceLine.normalize();
+            let start = p5.Vector.add(bodies[0].pos, p5.Vector.mult(forceLine, bodies[0].radius));
+            let end = p5.Vector.sub(bodies[1].pos, p5.Vector.mult(forceLine, bodies[1].radius));
+            line(start.x, start.y, end.x, end.y);
+            
+            drawDottedLine(bodies[0].pos.x, bodies[0].pos.y, bodies[1].pos.x, bodies[1].pos.y);
+            pop();
+
+            if (showTrail && showOrbit) {
+                for (let i = 0; i < bodies.length; i++) {
+                    trails[i].push(createVector(bodies[i].pos.x, bodies[i].pos.y));
+                    if (trails[i].length > maxTrailPoints) {
+                        trails[i].shift();
+                    }
+                }
+
+                // Draw trails (puchhar)
+                noFill();
+                for (let i = 0; i < bodies.length; i++) {
+                    if (trails[i].length > 1) {
+                        push();
+                        beginShape();
+                        for (let j = 0; j < trails[i].length; j++) {
+                            const alpha = map(j, 0, trails[i].length, 0, 255);
+                            if (i === 0) stroke(65, 184, 255, alpha);
+                            else stroke(255, 89, 94, alpha);
+                            strokeWeight(2);
+                            vertex(trails[i][j].x, trails[i][j].y);
+                        }
+                        endShape();
+                        pop();
+                    }
+                }
+            }
+
+            if (showOrbit) {
+                let force = calculateAttraction(bodies[0], bodies[1]);
+                bodies[0].applyForce(force);
+                bodies[1].applyForce(force.mult(-1));
+            }
+
+            bodies.forEach(body => {
+                body.update();
+                body.draw();
+            });
+        }
+
+        function drawDottedLine(x1, y1, x2, y2) {
+            let d = dist(x1, y1, x2, y2);
+            let numDots = 20;
+            for (let i = 0; i <= numDots; i++) {
+                let x = lerp(x1, x2, i/numDots);
+                let y = lerp(y1, y2, i/numDots);
+                stroke(255, 50);
+                point(x, y);
+            }
+        }
+
+       
+        document.getElementById('reset').addEventListener('click', resetSimulation);
+        document.getElementById('toggleOrbit').addEventListener('click', () => {
+            showOrbit = !showOrbit;
+            resetSimulation();
+        });
+        document.getElementById('toggleTrail').addEventListener('click', () => {
+            showTrail = !showTrail;
+            trails = [[], []];
+        });
+
+        ['mass1', 'mass2', 'gravity'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('input', resetSimulation);
+        });
+    </script>
+
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="text-primary">Review Questions</h3>
+                <ol>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Calculate the gravitational force between two objects with masses 1000 kg and 2000 kg, separated by 10 meters.</p>
+                        <p><em>Answer:</em> F = G(m₁m₂/r²) = (6.674×10⁻¹¹)(1000×2000)/(10²) = 1.335×10⁻⁶ N</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Why do astronauts appear weightless in orbit despite being within Earth's gravitational field?</p>
+                        <p><em>Answer:</em> They are in constant free fall around Earth, but their horizontal velocity prevents them from falling to Earth. Both the astronauts and their spacecraft are falling at the same rate, creating the appearance of weightlessness.</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> What is the escape velocity from a planet with twice Earth's mass and the same radius as Earth?</p>
+                        <p><em>Answer:</em> Since v_e ∝ √M, doubling the mass increases escape velocity by √2. Therefore, new v_e = 11.2×√2 = 15.84 km/s</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> How does the gravitational force change when you double the distance between two objects?</p>
+                        <p><em>Answer:</em> Since F ∝ 1/r², doubling the distance reduces the force to ¼ of its original value.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+   
+    </div>
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-primary btn-sm rounded-pill px-2 py-1" style="width: 80px;" onclick="window.location.href = 'continue/'">Next</button>
+    </div>
+</body>
+</html>

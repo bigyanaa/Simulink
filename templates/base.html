@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulearn</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
+    <link href="{{url_for('static', filename='styles/styles.css')}}" rel="stylesheet">
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="window.location.href='/'">
+                <img src="{{url_for('static', filename='images/logo.svg')}}" alt="Simulearn Logo">
+                SimuLearn
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/  ">Home</a></li>
+                    
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="search-profile">
+                <input type="text" placeholder="Search...">
+                <img src="{{url_for('static',filename='images/ram.jpg')}}" alt="Profile">
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer style="background-color: #f8f9fa; padding: 20px; text-align: center; margin-top:120px; border-top: 1px solid #ddd;">
+        <p>&copy; 2025 Simulearn. All rights reserved.</p>
+        
+    </footer>
+    
+</body>
+</html>

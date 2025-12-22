@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potential Energy - Physics Learning Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MathJax for equation rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+        body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f0f4f8;
+    color: #2d3748;
+}
+
+.container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+.theory-section,
+.controls,
+.canvas-container,
+.results-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.theory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.simulation-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.controls {
+    flex: 1;
+    min-width: 300px;
+}
+
+.canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: rgb(227, 132, 132);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.formula-card,
+.result-card {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+.value-display {
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background: #764ba2;
+}
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+  
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Potential Energy</h1>
+                <p class="lead text-dark tochange">Potential energy is the stored energy possessed by an object due to its position, configuration, or state. This energy has the potential to be converted into kinetic energy.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh1vZHPYcCqAUuTWawY6rRzyMmgm9ds4W4BU7VR21R8mVV-zWKSnUykQYwo_UH4VKMu00&usqp=CAU">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-primary">Types of Potential Energy</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Gravitational</h4>
+                        <div class="alert alert-primary">
+                            <p>$$ PE_g = mgh $$</p>
+                            <ul class="mb-0">
+                                <li>m = mass</li>
+                                <li>g = gravitational field (9.81 m/s²)</li>
+                                <li>h = height</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Elastic</h4>
+                        <div class="alert alert-primary">
+                            <p>$$ PE_e = \frac{1}{2}kx^2 $$</p>
+                            <ul class="mb-0">
+                                <li>k = spring constant</li>
+                                <li>x = displacement</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Electric</h4>
+                        <div class="alert alert-primary">
+                            <p>$$ PE_e = k\frac{q_1q_2}{r} $$</p>
+                            <ul class="mb-0">
+                                <li>k = Coulomb's constant</li>
+                                <li>q = charges</li>
+                                <li>r = distance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Conservation of Energy</h3>
+                <p>The total mechanical energy in a closed system remains constant:</p>
+                <div class="alert alert-primary">
+                    <p>$$ E_{total} = KE + PE = constant $$</p>
+                    <p>$$ \frac{1}{2}mv^2 + mgh = constant $$</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Applications</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Engineering Applications</h4>
+                        <ul>
+                            <li>Hydroelectric power generation</li>
+                            <li>Spring-loaded devices</li>
+                            <li>Roller coasters</li>
+                            <li>Energy storage systems</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Natural Examples</h4>
+                        <ul>
+                            <li>Water cycle</li>
+                            <li>Chemical bonds</li>
+                            <li>Planetary orbits</li>
+                            <li>Stretched rubber bands</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <h1>Gravity Visualization</h1>
+                <p class="tochange">You can Visualize Gravity here</p>
+            </div>
+    
+            <br><br><p>Use your mouse to pickup the ball and see it's energy increase with height.</p>
+            <p>Consider the ball has mass \[m = 1 kg\] and \[g = 10m/s^2\]</p>
+    
+            <center><div class="canvas-container" id="canvas-container" style="height: 500px;"></canvas></center>
+              
+    </body>
+    
+    <script>
+    
+        function setup()
+        {
+            const canvas = createCanvas(600,400);
+            canvas.parent('canvas-container');
+            background(220);
+            
+            ball = new Ball()
+    
+        }
+    
+        function draw()
+        {
+            clear();
+            fill(0,102,255);
+            ball.draw()
+            
+        }
+    
+        class Ball{
+            constructor(){
+                this.size = 20;
+                this.pos = createVector(this.size,400-this.size);
+                this.gravityWorking = true;
+                this.velY = 0;
+                
+            }
+    
+            draw()
+            {
+                ellipse(this.pos.x,this.pos.y,this.size,this.size);
+    
+                // check mouse
+                if (mouseIsPressed)
+            {
+                if (mouseX > ball.size && mouseY > ball.size){
+                ball.pos.x = mouseX
+                ball.pos.y = mouseY
+                this.gravityWorking = false
+                ball.velY = 0;}
+            }
+            
+            else{
+                this.gravityWorking = true
+            }
+    
+            if (this.pos.y >=400-this.size)
+            {
+                this.gravityWorking  = false
+                this.pos = createVector(this.pos.x,400-this.size);
+            }
+            else
+            {
+                this.gravityWorking = true
+            }
+    
+            if (this.gravityWorking)
+            {
+                this.velY += 0.01;
+                this.pos.y += this.velY;
+            }
+            // storke(400);
+            push();
+            strokeWeight(5);
+            line(this.pos.x,this.pos.y+this.size,this.pos.x,400);
+            pop();
+    
+            push();
+            fill(255,255,255);
+            textSize(20);
+            text("Height: "+(400-this.pos.y-this.size)/10+"m",this.pos.x+this.size+5,(this.pos.y+this.size+400)/2)
+            text("PE: "+5*10*(400-this.pos.y-this.size)/10 + "J",this.pos.x+this.size+5,(this.pos.y+this.size+400)/2+20)
+            pop();
+            }
+        }
+    </script>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="text-primary">Review Questions</h3>
+        <ol>
+            <li class="mb-3">
+                <p><strong>Question:</strong> A 2 kg object is lifted to a height of 5 meters. Calculate its gravitational potential energy. (g = 9.81 m/s²)</p>
+                <p><em>Answer:</em> 
+                $$\begin{align*}
+                PE &= mgh \\
+                &= 2\text{ kg} \times 9.81\text{ m/s}^2 \times 5\text{ m} \\
+                &= 98.1\text{ J}
+                \end{align*}$$
+                </p>
+            </li>
+            <li class="mb-3">
+                <p><strong>Question:</strong> A spring has a spring constant of 100 N/m. How much potential energy is stored when it is compressed by 0.2 meters?</p>
+                <p><em>Answer:</em>
+                $$\begin{align*}
+                PE &= \frac{1}{2}kx^2 \\
+                &= \frac{1}{2} \times 100\text{ N/m} \times (0.2\text{ m})^2 \\
+                &= 2\text{ J}
+                \end{align*}$$
+                </p>
+            </li>
+            <li class="mb-3">
+                <p><strong>Question:</strong> Why does stretching a rubber band make it feel warmer?</p>
+                <p><em>Answer:</em> Some of the potential energy stored in the stretched rubber band 
+                $$\begin{align*}
+                PE &= \frac{1}{2}kx^2
+                \end{align*}$$
+                is converted to thermal energy due to internal friction.</p>
+            </li>
+            <li class="mb-3">
+                <p><strong>Question:</strong> If a ball is thrown straight up, at what point is its potential energy maximum?</p>
+                <p><em>Answer:</em> At the highest point of its trajectory, where velocity is zero and thus kinetic energy 
+                $$\begin{align*}
+                KE &= \frac{1}{2}mv^2 = 0
+                \end{align*}$$
+                </p>
+            </li>
+        </ol>
+    </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-primary btn-sm rounded-pill px-2 py-1" style="width: 80px;" onclick="window.location.href = 'continue/'">Next</button>
+    </div>
+
+
+
+</body>
+</html>

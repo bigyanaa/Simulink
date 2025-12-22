@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Flask App{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="static\styles\styles2.css">
+
+<div class="container">
+    <div class="main-content">
+        <h1 class="text-3xl font-bold text-gray-800">Hi, {{student.name}}</h1>
+        <p class="text-gray-600 mt-2">Welcome to SimuLearn</p>
+
+        <div class="tabs mt-8">
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">{{course.name}}</button>
+        </div>
+
+        <div class="subjects-grid">
+            {% for topics in course.topics %}
+            {% if topics.name == 'Logic Gates' %}
+            <div class="subject" onclick="window.location.href='/{{ topics.html_link }}'" style="background-color: rgba(255,255,255,0.1); background-blend-mode:lighten; background-size:contain; justify-content:center; align-items: center; display:flex; height: 200px; width:200px; background-image: url({{url_for('static',filename='images/' +topics.logo_link)}}); background-repeat:no-repeat;">
+                <p class="topicstohover" style="position: relative; bottom:-70px; font-weight: bolder; font-size: 25px; color: rgb(30, 18, 24); stroke-width: 10px;">{{topics.name}}</p>
+            </div>
+            {% else %}
+            <div class="subject" onclick="window.location.href='/{{ topics.html_link }}'" style="background-color: rgba(255,255,255,0.1); background-blend-mode:lighten; background-size:contain; justify-content:center; align-items: center; display:flex; height: 200px; width:200px; background-image: url({{url_for('static',filename='images/' +topics.logo_link)}}); background-repeat:no-repeat;">
+                <p class="topicstohover" style="position: relative; bottom:-70px; font-weight: bolder; font-size: 30px; color: rgb(30, 18, 24); stroke-width: 10px;">{{topics.name}}</p>
+            </div>
+            {% endif %}
+           
+            {% endfor %}
+        </div>
+
+        <div class="progress-section">
+            <p class="text-gray-700 font-medium">Overall Progress</p>
+            <div class="progress-bar">
+                <div class="progress" style="width:{{ progress|round(1) }}%;"></div>
+            </div>
+            <span class="text-gray-600">{{ progress|round(1) }}% Complete</span>
+        </div>
+    </div>
+
+    <div class="sidebar-container">
+        <div class="topics-sidebar">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recently Learned Topics</h3>
+            <ul class="space-y-2">
+                {% for topic in recent_topics %}
+                <li class="text-gray-600">📄 {{topic.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <button class="continue-learning-btn" onclick="window.location.href='{{next_topic}}'">Continue Learning</button>
+    </div>
+</div>
+{% endblock %}

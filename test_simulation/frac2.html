@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FractionFun - Interactive Fraction Learning</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #f0f4f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #FF6B6B;
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .simulation-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .controls {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: white;
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4A4A4A;
+            font-size: 1.1em;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            width: 100%;
+            font-size: 1.1em;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.02);
+            background: #45a049;
+        }
+        .fraction-display {
+            text-align: center;
+            font-size: 2em;
+            margin: 1rem 0;
+            color: #4A4A4A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 FractionFun! 🎨</h1>
+        </div>
+       
+        <div class="simulation-container">
+            <div class="controls">
+                <div class="fraction-display">
+                    <span id="numerator">1</span>/<span id="denominator">2</span>
+                </div>
+               
+                <div class="input-group">
+                    <label>Numerator</label>
+                    <input type="range" id="numeratorSlider" min="1" max="10" value="1">
+                </div>
+               
+                <div class="input-group">
+                    <label>Denominator</label>
+                    <input type="range" id="denominatorSlider" min="1" max="10" value="2">
+                </div>
+               
+                <button id="toggleShape">Switch Shape</button>
+                <button id="toggleAnimation">Toggle Animation</button>
+            </div>
+           
+            <div class="canvas-container" id="canvas-container"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentShape = 'circle';
+        let animate = false;
+        let rotation = 0;
+       
+        function setup() {
+            const canvas = createCanvas(600, 400);
+            canvas.parent('canvas-container');
+        }
+       
+        function drawCircleFraction(num, denom) {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = min(width, height) * 0.35;
+           
+            push();
+            translate(centerX, centerY);
+            if (animate) rotate(rotation);
+           
+            // Draw the background circle (unfilled)
+            fill(220);
+            noStroke();
+            circle(0, 0, radius * 2);
+           
+            // Draw slices (filled parts)
+            const angleStep = TWO_PI / denom;
+            for (let i = 0; i < num; i++) {
+                fill('#FF6B6B');
+                arc(0, 0, radius * 2, radius * 2, i * angleStep, (i + 1) * angleStep);
+            }
+            
+            // Draw dividing lines even when shape is not filled
+            stroke(0);
+            strokeWeight(2);
+            for (let i = 0; i < denom; i++) {
+                const angle = i * TWO_PI / denom;
+                const x1 = cos(angle) * radius;
+                const y1 = sin(angle) * radius;
+                const x2 = cos(angle + TWO_PI / denom) * radius;
+                const y2 = sin(angle + TWO_PI / denom) * radius;
+                line(x1, y1, x2, y2);
+            }
+           
+            // Center circle for better visibility
+            fill(255);
+            noStroke();
+            circle(0, 0, 20);
+            pop();
+        }
+       
+        function drawRectangleFraction(num, denom) {
+            const margin = 50;
+            const rectWidth = width - margin * 2;
+            const rectHeight = height - margin * 2;
+            const pieceWidth = rectWidth / denom;
+           
+            push();
+            translate(margin, margin);
+            if (animate) translate(0, sin(rotation * 2) * 10);
+           
+            // Draw the background rectangle (unfilled)
+            fill(220);
+            noStroke();
+            rect(0, 0, rectWidth, rectHeight);
+           
+            // Draw pieces (filled parts)
+            for (let i = 0; i < num; i++) {
+                fill('#FF6B6B');
+                rect(i * pieceWidth, 0, pieceWidth, rectHeight);
+            }
+            
+            // Draw dividing lines even when shape is not filled
+            stroke(0);
+            strokeWeight(2);
+            for (let i = 1; i < denom; i++) {
+                line(i * pieceWidth, 0, i * pieceWidth, rectHeight);
+            }
+            pop();
+        }
+       
+        function draw() {
+            background(255);
+           
+            const num = parseInt(document.getElementById('numeratorSlider').value);
+            const denom = parseInt(document.getElementById('denominatorSlider').value);
+           
+            if (currentShape === 'circle') {
+                drawCircleFraction(num, denom);
+            } else {
+                drawRectangleFraction(num, denom);
+            }
+           
+            if (animate) {
+                rotation += 0.02;
+            }
+        }
+       
+        // Event Listeners
+        document.getElementById('numeratorSlider').addEventListener('input', function() {
+            document.getElementById('numerator').textContent = this.value;
+        });
+       
+        document.getElementById('denominatorSlider').addEventListener('input', function() {
+            document.getElementById('denominator').textContent = this.value;
+        });
+       
+        document.getElementById('toggleShape').addEventListener('click', function() {
+            currentShape = currentShape === 'circle' ? 'rectangle' : 'circle';
+        });
+       
+        document.getElementById('toggleAnimation').addEventListener('click', function() {
+            animate = !animate;
+            rotation = 0;
+        });
+    </script>
+</body>
+</html>

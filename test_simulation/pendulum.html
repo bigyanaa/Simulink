@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendulum Motion - Physics Learning Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MathJax for equation rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .simulation-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .controls {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            width: 100%;
+        }
+        button:hover {
+            background: #357abd;
+        }
+        .value-display {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.2rem;
+        }
+
+    </style>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+   
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Pendulum Motion</h1>
+                <p class="lead tochange">A simple pendulum demonstrates simple harmonic motion, where the restoring force is proportional to displacement and acts in the opposite direction.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://www.sciencing.com/sciencing/affects-swing-rate-pendulum-8113160/c58f5470b0ea406183845c37a209e8c2.jpg" class="img-fluid rounded shadow" alt="Simple Pendulum Motion">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-primary">Key Equations</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Period of Oscillation</h5>
+                            <p>$$ T = 2\pi\sqrt{\frac{L}{g}} $$</p>
+                            <ul class="mb-0">
+                                <li>T = Period</li>
+                                <li>L = Length of pendulum</li>
+                                <li>g = Gravitational acceleration (9.81 m/s²)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Angular Displacement</h5>
+                            <p>$$ \theta(t) = \theta_0\cos(\omega t + \phi) $$</p>
+                            <ul class="mb-0">
+                                <li>θ₀ = Maximum angular displacement</li>
+                                <li>ω = Angular frequency</li>
+                                <li>φ = Phase constant</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="text-primary">Energy Conservation</h4>
+                        <div class="alert alert-primary">
+                            <p>$$ E_{total} = KE + PE = constant $$</p>
+                            <p>$$ \frac{1}{2}mv^2 + mgh = \frac{1}{2}mL^2\dot{\theta}^2 + mgL(1-\cos\theta) $$</p>
+                        </div>
+                        <ul>
+                            <li>At maximum displacement: All energy is potential</li>
+                            <li>At equilibrium: All energy is kinetic</li>
+                            <li>Total energy remains constant (ignoring air resistance)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="text-primary">Important Properties</h4>
+                        <ul>
+                            <li>Period is independent of mass</li>
+                            <li>Period is independent of amplitude (for small angles)</li>
+                            <li>Motion follows sinusoidal pattern</li>
+                            <li>Small angle approximation: sin θ ≈ θ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="text-primary">Applications</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Practical Uses</h4>
+                        <ul>
+                            <li>Grandfather Clocks</li>
+                            <li>Seismographs</li>
+                            <li>Metronomes</li>
+                            <li>Structural Testing</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Real-World Examples</h4>
+                        <ul>
+                            <li>Swing Sets</li>
+                            <li>Building Stabilizers</li>
+                            <li>Scientific Instruments</li>
+                            <li>Time Measurement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <h1>Pendulum Simulation</h1>
+                <p class="tochange">You can Simulate Pendulum here</p>
+            </div>
+            
+            <div class="simulation-container">
+                <div class="controls">
+                    <div class="input-group">
+                        <label>Length (m)</label>
+                        <input type="range" id="length" min="100" max="300" value="200">
+                        <div class="value-display">Current: <span id="lengthValue">2</span>m</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Mass (kg)</label>
+                        <input type="range" id="mass" min="10" max="50" value="20">
+                        <div class="value-display">Current: <span id="massValue">20</span>kg</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Initial Angle (degrees)</label>
+                        <input type="range" id="angle" min="0" max="90" value="45">
+                        <div class="value-display">Current: <span id="angleValue">45</span>°</div>
+                    </div>
+    
+                    <div class="input-group">
+                        <label>Gravity (m/s²)</label>
+                        <input type="range" id="gravity" min="1" max="20" value="9.81" step="0.1">
+                        <div class="value-display">Current: <span id="gravityValue">9.81</span>m/s²</div>
+                    </div>
+    
+                    <div class="input-group">
+                        <label>Damping</label>
+                        <input type="range" id="damping" min="0" max="100" value="0">
+                        <div class="value-display">Current: <span id="dampingValue">0</span>%</div>
+                    </div>
+                    
+                    <button id="start">Start/Stop</button>
+                    <button id="reset">Reset</button>
+                    <button id="trail">Toggle Trail</button>
+                </div>
+                
+                <div class="canvas-container" id="canvas-container"></div>
+            </div>
+        </div>
+    
+        <script>
+            // TODO: remove trail formation
+            let pendulum;
+            let isRunning = false;
+            let showTrail = true;
+            let trail = [];
+            const maxTrailPoints = 100;
+    
+            class Pendulum {
+                constructor() {
+                    this.reset();
+                }
+    
+                reset() {
+                    const angle = radians(float(document.getElementById('angle').value));
+                    this.length = float(document.getElementById('length').value);
+                    this.mass = float(document.getElementById('mass').value);
+                    this.angle = angle;
+                    this.angleV = 0;
+                    this.angleA = 0;
+                    this.origin = createVector(width/2, 100);
+                    trail = [];
+                }
+    
+                update() {
+                    if (!isRunning) return;
+    
+                    const g = float(document.getElementById('gravity').value);
+                    const damping = float(document.getElementById('damping').value) / 1000;
+                    
+                    // acceration angle
+                    this.angleA = (-g / this.length) * sin(this.angle);
+                    
+                    // damping deko
+    
+                    this.angleV *= (1 - damping);
+                    
+                    this.angleV += this.angleA;
+                    this.angle += this.angleV;
+                    
+                    if (showTrail) {
+                        trail.push(this.getBobPosition());
+                        if (trail.length > maxTrailPoints) {
+                            trail.shift();
+                        }
+                    }
+                }
+    
+                getBobPosition() {
+                    const x = this.origin.x + this.length * sin(this.angle);
+                    const y = this.origin.y + this.length * cos(this.angle);
+                    return createVector(x, y);
+                }
+    
+                draw() {
+                    const bobPos = this.getBobPosition();
+    
+                    if (showTrail && trail.length > 1) {
+                        push();
+                        noFill();
+                        beginShape();
+                        for (let i = 0; i < trail.length; i++) {
+                            const alpha = map(i, 0, trail.length, 0, 255);
+                            stroke(65, 184, 255, alpha);
+                            strokeWeight(2);
+                            vertex(trail[i].x, trail[i].y);
+                        }
+                        endShape();
+                        pop();
+                    }
+    
+                    // string
+                    push();
+                    stroke(200);
+                    strokeWeight(2);
+                    line(this.origin.x, this.origin.y, bobPos.x, bobPos.y);
+                    pop();
+    
+                    // connect point
+                    push();
+                    fill(150);
+                    noStroke();
+                    circle(this.origin.x, this.origin.y, 10);
+                    pop();
+    
+               
+                    push();
+                    // Glow effect
+                    for(let i = 4; i > 0; i--) {
+                        fill(65, 184, 255, 50/i);
+                        noStroke();
+                        circle(bobPos.x, bobPos.y, this.mass + i * 10);
+                    }
+                    //  bob
+                    fill(65, 184, 255);
+                    noStroke();
+                    circle(bobPos.x, bobPos.y, this.mass);
+                    pop();
+    
+                    
+                    push();
+                    stroke(255, 100);
+                    noFill();
+                    const arcSize = 60;
+                    arc(this.origin.x, this.origin.y, arcSize, arcSize, -PI/2, this.angle - PI/2);
+                    pop();
+                }
+            }
+    
+            function setup() {
+                const canvas = createCanvas(600, 600);
+                canvas.parent('canvas-container');
+                pendulum = new Pendulum();
+                updateDisplays();
+            }
+    
+            function draw() {
+                background(26, 26, 46);
+                pendulum.update();
+                pendulum.draw();
+            }
+    
+            function updateDisplays() {
+                document.getElementById('lengthValue').textContent = (float(document.getElementById('length').value)/100).toFixed(1);
+                document.getElementById('massValue').textContent = document.getElementById('mass').value;
+                document.getElementById('angleValue').textContent = document.getElementById('angle').value;
+                document.getElementById('gravityValue').textContent = document.getElementById('gravity').value;
+                document.getElementById('dampingValue').textContent = document.getElementById('damping').value;
+            }
+    
+          
+            document.getElementById('start').addEventListener('click', () => isRunning = !isRunning);
+            document.getElementById('reset').addEventListener('click', () => {
+                isRunning = false;
+                pendulum.reset();
+            });
+            document.getElementById('trail').addEventListener('click', () => {
+                showTrail = !showTrail;
+                trail = [];
+            });
+    
+            ['length', 'mass', 'angle', 'gravity', 'damping'].forEach(id => {
+                const input = document.getElementById(id);
+                input.addEventListener('input', () => {
+                    updateDisplays();
+                    if (!isRunning) pendulum.reset();
+                });
+            });
+        </script>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-primary">Review Questions</h3>
+                <ol>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> A simple pendulum has a length of 2.0 meters. Calculate its period on Earth (g = 9.81 m/s²).</p>
+                        <p><em>Answer:</em> Using T = 2π√(L/g) = 2π√(2/9.81) = 2.84 seconds</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Why does a grandfather clock pendulum swing slower on a hot day?</p>
+                        <p><em>Answer:</em> The metal rod expands with heat, increasing the pendulum's length. Since T ∝ √L, a longer pendulum has a longer period.</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> A pendulum's period doubles. By what factor did its length change?</p>
+                        <p><em>Answer:</em> Since T ∝ √L, if T doubles, L must increase by a factor of 4 (quadruple).</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Why are pendulum clocks less accurate at high altitudes?</p>
+                        <p><em>Answer:</em> The gravitational field strength (g) decreases with altitude, affecting the period T = 2π√(L/g), making the pendulum swing slower.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-primary btn-sm rounded-pill px-2 py-1" style="width: 80px;" onclick="window.location.href = 'continue/'">Next</button>
+    </div>
+</body>
+</html>

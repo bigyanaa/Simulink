@@ -1,0 +1,497 @@
+
+{% extends "base.html" %}
+
+{% block title %}Home - My Flask App{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Motion - Physics Learning Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 1rem;
+            background: #1a73e8;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .theory-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .theory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .formula-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .simulation-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .controls {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .canvas-container {
+            flex: 2;
+            min-width: 600px;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .results-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .result-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .value-display {
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #3457D5 !important;
+        }
+        .card {
+            border-color: #3457D5;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .text-primary {
+            color: #3457D5 !important;
+        }
+        .btn-primary {
+            background-color: #3457D5;
+            border-color: #3457D5;
+        }
+        .alert-primary {
+            background-color: #e7eaf6;
+            border-color: #3457D5;
+            color: #3457D5;
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-4 text-primary">Projectile Motion</h1>
+                <p class="lead tochange">Projectile motion combines constant horizontal velocity with vertical acceleration due to gravity, resulting in a parabolic trajectory.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://miro.medium.com/v2/resize:fit:1200/1*4oH1NdnujawoaqZwsXnTmw.jpeg" class="img-fluid rounded shadow" alt="Projectile Motion">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-primary">Key Equations</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Horizontal Motion</h5>
+                            <p>$$ x = v_0\cos(\theta)t $$</p>
+                            <p>$$ v_x = v_0\cos(\theta) $$</p>
+                            <p>$$ a_x = 0 $$</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Vertical Motion</h5>
+                            <p>$$ y = v_0\sin(\theta)t - \frac{1}{2}gt^2 $$</p>
+                            <p>$$ v_y = v_0\sin(\theta) - gt $$</p>
+                            <p>$$ a_y = -g $$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Important Parameters</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Maximum Height</h5>
+                            <p>$$ h_{max} = \frac{v_0^2\sin^2(\theta)}{2g} $$</p>
+                        </div>
+                        <div class="alert alert-primary">
+                            <h5>Time of Flight</h5>
+                            <p>$$ T = \frac{2v_0\sin(\theta)}{g} $$</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h5>Range</h5>
+                            <p>$$ R = \frac{v_0^2\sin(2\theta)}{g} $$</p>
+                            <p>Maximum range occurs at θ = 45°</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Applications</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Applications</th>
+                                <th>Key Considerations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sports</td>
+                                <td>Basketball, Soccer, Golf</td>
+                                <td>Launch angle, Initial velocity</td>
+                            </tr>
+                            <tr>
+                                <td>Military</td>
+                                <td>Artillery, Ballistics</td>
+                                <td>Air resistance, Wind effects</td>
+                            </tr>
+                            <tr>
+                                <td>Engineering</td>
+                                <td>Fountain design, Construction</td>
+                                <td>Water pressure, Safety margins</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="header">
+                <h1>Projectile Motion Simulator</h1>
+                <p class="tochange">You can Simulate Projectile motion here</p>
+            </div>
+    
+            
+            
+            <div class="simulation-container">
+                <div class="controls">
+                    <h2>Controls</h2>
+                    <div class="input-group">
+                        <label for="velocity">Initial Velocity (m/s)</label>
+                        <input type="range" id="velocity" min="1" max="50" value="20">
+                        <div class="value-display">Current: <span id="velocityValue">20</span> m/s</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="angle">Launch Angle (degrees)</label>
+                        <input type="range" id="angle" min="0" max="90" value="45">
+                        <div class="value-display">Current: <span id="angleValue">45</span>°</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="gravity">Gravity (m/s²)</label>
+                        <input type="range" id="gravity" min="1" max="20" value="9.81" step="0.1">
+                        <div class="value-display">Current: <span id="gravityValue">9.81</span> m/s²</div>
+                    </div>
+                    
+                    <button id="launch">Launch Projectile</button>
+                    <button id="trace" style="margin-top: 0.5rem;">Toggle Trace</button>
+                </div>
+                
+                <div class="canvas-container" id="canvas-container"></div>
+            </div>
+    
+            <div class="results-container">
+                <h2>Flight Analysis</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Maximum Height</h3>
+                        <p id="maxHeight">0.00 m</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Horizontal Range</h3>
+                        <p id="range">0.00 m</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Time of Flight</h3>
+                        <p id="flightTime">0.00 s</p>
+                    </div>
+                    <div class="result-card">
+                        <h3>Current Velocity</h3>
+                        <p id="currentVelocity">0.00 m/s</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script>
+            let projectile;
+            let trail = [];
+            let isLaunched = false;
+            let showTrace = false;
+            let maxHeightReached = 0;
+            let flightStartTime = 0;
+            let scale = 50; 
+            // main starting ya dekhi garne
+            function setup() {
+    
+                const canvas = createCanvas(600, 400);
+            
+                canvas.parent('canvas-container');
+                projectile = new Projectile();
+            }
+            
+            function draw() {
+                background(255);
+                drawGrid();
+                
+                if (showTrace && trail.length > 0) {
+                    drawTrail();
+                }
+                
+                if (isLaunched) {
+                    projectile.update();
+                    updateDisplays();
+                    
+                    if (projectile.pos.y >= height - 10) {
+                        isLaunched = false;
+                        calculateFinalResults();
+                    }
+                }
+                projectile.draw();
+            }
+            
+            class Projectile {
+                constructor() {
+                    this.reset();
+                }
+                
+                reset() {
+                    this.pos = createVector(30, height - 10);
+                    this.vel = createVector(0, 0);
+                    this.acc = createVector(0, 0);
+                    this.initialVel = 0;
+                    this.initialAngle = 0;
+                    trail = [];
+                    maxHeightReached = 0;
+                    flightStartTime = 0;
+                }
+                
+                launch(velocity, angle) {
+                    const angleRad = radians(angle);
+                    this.initialVel = velocity;
+                    this.initialAngle = angle;
+                    this.vel.x = velocity * cos(angleRad);
+                    this.vel.y = -velocity * sin(angleRad);
+                    this.acc.y = float(document.getElementById('gravity').value);
+                    flightStartTime = millis();
+                }
+                
+                update() {
+                    trail.push(createVector(this.pos.x, this.pos.y));
+                    this.vel.y += this.acc.y * 0.1;
+                    this.pos.add(p5.Vector.mult(this.vel, 0.1));
+                    
+                    const currentHeight = (height - this.pos.y) / scale;
+                    maxHeightReached = max(maxHeightReached, currentHeight);
+                }
+                
+                draw() {
+                    push();
+                    fill(100, 126, 234);
+                    noStroke();
+                    circle(this.pos.x, this.pos.y, 20);
+                    pop();
+                }
+            }
+            
+            function calculateFinalResults() {
+                const v0 = projectile.initialVel;
+                const theta = radians(projectile.initialAngle);
+                const g = float(document.getElementById('gravity').value);
+                
+                const maxHeight = (v0 * v0 * sin(theta) * sin(theta)) / (2 * g);
+                const range = (v0 * v0 * sin(2 * theta)) / g;
+                const timeOfFlight = (2 * v0 * sin(theta)) / g;
+                
+                // unit change garne last ma 
+                document.getElementById('maxHeight').textContent = maxHeight.toFixed(2) + ' m';
+                document.getElementById('range').textContent = range.toFixed(2) + ' m';
+                document.getElementById('flightTime').textContent = timeOfFlight.toFixed(2) + ' s';
+            }
+            
+            function updateDisplays() {
+                const currentVel = sqrt(projectile.vel.x * projectile.vel.x + projectile.vel.y * projectile.vel.y);
+                document.getElementById('currentVelocity').textContent = currentVel.toFixed(2) + ' m/s';
+            }
+            
+            // puchhar draw garne
+            function drawTrail() {
+                push();
+                noFill();
+                stroke(118, 75, 162);
+                strokeWeight(2);
+                beginShape();
+                for (let pos of trail) {
+                    vertex(pos.x, pos.y);
+                }
+                endShape();
+                pop();
+            }
+            
+            function drawGrid() {
+                push();
+                stroke(200);
+                strokeWeight(1);
+                
+                for (let x = 0; x < width; x += 50) {
+                    line(x, 0, x, height);
+                }
+                
+                for (let y = 0; y < height; y += 50) {
+                    line(0, y, width, y);
+                }
+                
+                stroke(100);
+                strokeWeight(2);
+                line(0, height - 10, width, height - 10); // x-axis ko lagi
+                line(30, 0, 30, height); // y-axis ko lagi
+                
+                pop();
+            }
+            
+            document.getElementById('launch').addEventListener('click', () => {
+                const velocity = float(document.getElementById('velocity').value);
+                const angle = float(document.getElementById('angle').value);
+                projectile.reset();
+                projectile.launch(velocity, angle);
+                isLaunched = true;
+            });
+            
+            document.getElementById('trace').addEventListener('click', () => {
+                showTrace = !showTrace;
+            });
+            
+            ['velocity', 'angle', 'gravity'].forEach(id => {
+                const input = document.getElementById(id);
+                const display = document.getElementById(id + 'Value');
+                input.addEventListener('input', () => {
+                    display.textContent = input.value;
+                });
+            });
+    
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        </script>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="text-primary">Review Questions</h3>
+                <ol>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> A ball is thrown with an initial velocity of 20 m/s at an angle of 30° above the horizontal. Calculate its maximum height.</p>
+                        <p><em>Answer:</em> Using h = (v₀²sin²θ)/(2g) = (20²×sin²30°)/(2×9.81) = 5.1 meters</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> Why is 45° the angle for maximum range in projectile motion?</p>
+                        <p><em>Answer:</em> At 45°, there's an optimal balance between horizontal and vertical components of velocity. This maximizes the range equation R = (v₀²sin2θ)/g, as sin(2×45°) = sin(90°) = 1</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> A projectile is launched at 60° and 30°. Compare the ranges.</p>
+                        <p><em>Answer:</em> The ranges will be equal because sin(2×60°) = sin(2×30°) = sin(120°) = sin(60°) = 0.866. This demonstrates the complementary angle property in projectile motion.</p>
+                    </li>
+                    <li class="mb-3">
+                        <p><strong>Question:</strong> How does air resistance affect projectile motion in reality?</p>
+                        <p><em>Answer:</em> Air resistance reduces both the range and maximum height, makes the path asymmetric (steeper descent than ascent), and shifts the maximum height point closer to the launch point.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="d-flex justify-content-between">
+        <button class="btn btn-primary btn-sm rounded-pill px-2 py-1" style="width: 80px;" onclick="window.location.href = 'continue/'">Next</button>
+    </div>
+</body>
+</html>
+{% endblock %}
